@@ -57,14 +57,6 @@
 // safe division
 #define SDIV(x,y)(((x)+(y)-1)/(y))
 
-// dirty hack to "support" fmadd on AVX 1 machines
-#ifndef __AVX2__
-    #define _mm256_fmadd_ps legacy_fmadd
-    __m256 legacy_fmadd (__m256 x, __m256 y, __m256 z) {
-        return _mm256_add_ps(_mm256_mul_ps(x, y), z);
-    }
-#endif
-
 // no_init_t
 #include <type_traits>
 
