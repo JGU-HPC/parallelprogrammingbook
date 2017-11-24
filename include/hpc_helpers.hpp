@@ -57,9 +57,16 @@
 // safe division
 #define SDIV(x,y)(((x)+(y)-1)/(y))
 
-#include <type_traits>
-#include <iostream>
+// dirty hack to "support" fmadd on AVX 1 machines
+#ifndef __AVX2__
+    #define _mm256_fmadd_ps legacy_fmadd
+    __m256 legacy_fmadd (__m256 x, __m256 y, __m256 z) {
+        return _mm256_add_ps(_mm256_mul_ps(x, y), z);
+    }
+#endif
 
+// no_init_t
+#include <type_traits>
 
 template<class T>
 class no_init_t {
@@ -82,11 +89,21 @@ public:
     constexpr no_init_t& operator - () noexcept { v_ = -v_; return *this; }
     constexpr no_init_t& operator ~ () noexcept { v_ = ~v_; return *this; }
 
-    // increment/decrement operators
+    // prefix increment/decrement operators
     constexpr no_init_t& operator ++ ()    noexcept { v_++; return *this; }
-    constexpr no_init_t& operator ++ (int) noexcept { v_++; return *this; }
     constexpr no_init_t& operator -- ()    noexcept { v_--; return *this; }
-    constexpr no_init_t& operator -- (int) noexcept { v_--; return *this; }
+
+    // postfix increment/decrement operators
+    constexpr no_init_t operator ++ (int) noexcept {
+       auto old(*this);
+       v_++; 
+       return old; 
+    }
+    constexpr no_init_t operator -- (int) noexcept {
+       auto old(*this);
+       v_--; 
+       return old; 
+    }
 
     // assignment operators
     constexpr no_init_t& operator  += (T v) noexcept { v_  += v; return *this; }
