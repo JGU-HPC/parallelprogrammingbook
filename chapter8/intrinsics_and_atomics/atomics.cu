@@ -5,8 +5,6 @@ typedef uint64_t index_t;
 typedef uint8_t label_t;
 typedef float value_t;
 
-__device__ int dyn_blid = 0;
-
 template <
     typename index_t,
     typename value_t,
@@ -97,8 +95,8 @@ int main () {
     std::cout << accum << std::endl;
 
     TIMERSTART(global_reduction)
-    //global_reduction_kernel<<<SDIV(num_entries*num_features, 32), 32>>>
-    //                       (Data, Result, num_entries*num_features);    CUERR
+    global_reduction_kernel<<<SDIV(num_entries*num_features, 32), 32>>>
+                                       (Data, Result, num_entries*num_features);    CUERR
     TIMERSTOP(global_reduction)
 
     TIMERSTART(static_reduction)
@@ -106,7 +104,7 @@ int main () {
     TIMERSTOP(static_reduction)
 
     TIMERSTART(copy_data_to_host)
-    cudaMemcpy(result, Result, sizeof(value_t), D2H);CUERR
+    cudaMemcpy(result, Result, sizeof(value_t), D2H);                               CUERR
     TIMERSTOP(copy_data_to_host)
 
 
