@@ -50,8 +50,9 @@ void printOutput(std::string file, int rows, int cols, float *data){
 
 int main (int argc, char *argv[]){
 	if(argc < 6){
-		std::cout << "ERROR: The syntax of the program is ./jacobi-1D inputFile rows cols outputFile errThreshold"
-				<< std::endl;
+		std::cout << "ERROR: The syntax of the program is " << argv[0] 
+                          << " inputFile rows cols outputFile errThreshold"
+			  << std::endl;
 		exit(1);
 	}
 
