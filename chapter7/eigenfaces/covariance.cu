@@ -235,8 +235,8 @@ int main (int argc, char * argv[]) {
     symmetric_covariance_kernel<<<blocks, threads>>>
                        (Data, Cov, imgs, rows*cols);                      CUERR
     #else
-    dim3 blocks(SDIV(rows*cols, 8), SDIV(rows*cols, 8));
-    dim3 threads(8, 8, 1);
+    dim3 blocks(SDIV(rows*cols, 32), SDIV(rows*cols, 32));
+    dim3 threads(32, 32, 1);
     shared_covariance_kernel<<<blocks, threads>>>
                        (Data, Cov, imgs, rows*cols);                      CUERR
     #endif
