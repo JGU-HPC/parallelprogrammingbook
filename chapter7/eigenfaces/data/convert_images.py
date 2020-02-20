@@ -28,7 +28,9 @@ print dimx*dimy
 for index, filename in enumerate(files):
     if index % 1000 == 0:
         print index
-    data[index] = np.mean(imread(dirname+filename), axis=2)[::subx,::suby].flatten()
+    data[index] = np.mean(imread(dirname+filename)[::4,::4] , axis=2).ravel()
+    #data[index] = np.mean(imread(dirname+filename), axis=2)[::subx,::suby].flatten()
 
 with open("celebA_gray_lowres.%d_%d_%d_32.bin" % (data.shape[0], dimx, dimy), "wb") as f:
-    f.write(ar.array("f", data.flatten()))
+    np.asarray(data, dtype=np.float32).tofile(f)
+    #f.write(ar.array("f", data.flatten()))
