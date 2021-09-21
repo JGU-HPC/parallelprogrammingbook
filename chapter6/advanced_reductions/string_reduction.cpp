@@ -5,7 +5,6 @@
 
 int main () {
 
-    const uint64_t num_iters = 1UL << 20;
     std::string result("SIMON SAYS_");
     std::vector<std::string> data {"p", "a", "r", "a", "l", "l",
                                    "e", "l", " ", "p", "r", "o",
